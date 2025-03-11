@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const { Client, GatewayIntentBits, Partials, ButtonBuilder, ButtonStyle, ActionRowBuilder, PermissionsBitField } = require('discord.js');
 
-
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -104,7 +103,15 @@ client.on('messageCreate', async (message) => {
         
         await message.channel.send({ content: "Nhấn vào nút dưới đây để tạo ticket.", components: [row] });
     }
+    
+    if (command === "close") {
+        if (!message.channel.name.startsWith("ticket-")) {
+            return message.reply("Bạn chỉ có thể dùng lệnh này trong kênh ticket!");
+        }
+        
+        await message.channel.send("Đóng ticket trong 5 giây...");
+        setTimeout(() => message.channel.delete(), 5000);
+    }
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN);
-
